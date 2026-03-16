@@ -87,6 +87,11 @@ public class FileArchiveService {
         return new String(plaintext, StandardCharsets.UTF_8);
     }
 
+
+    public static Path[] listArchives() throws IOException {
+        return listArchives(defaulPath());
+    }
+
     /**
      * Returns all {@code .crisafe} files found in {@code directory}, sorted by name.
      */
@@ -116,5 +121,23 @@ public class FileArchiveService {
                 new SecretKeySpec(key, "AES"),
                 new GCMParameterSpec(GCM_TAG_BITS, iv));
         return cipher.doFinal(ciphertext);
+    }
+
+    /**
+     * Resolves the directory next to the running JAR.
+     * Falls back to the current working directory when running from an IDE or Maven.
+     */
+    public static Path defaulPath() {
+        try {
+            Path location = Path.of(
+                    Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()
+            );
+            if (location.toString().endsWith(".jar")) {
+                return location.getParent();
+            }
+        } catch (Exception ignored) {
+            // Ignored
+        }
+        return Path.of(System.getProperty("user.dir"));
     }
 }
