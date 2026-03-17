@@ -7,9 +7,11 @@ public class Main {
     CryptoService crypto;
     FileArchiveService archive;
 
-    public Main(){
+    public Main() {
+
         crypto = new CryptoService();
         archive = new FileArchiveService(crypto);
+
     }
 
     public static void main(String[] args) throws Exception {
@@ -19,20 +21,30 @@ public class Main {
 
     }
 
-    public void init() throws Exception{
+    public void init() throws Exception {
 
         Menu menu = new Menu();
         Menu.MenuResult result = menu.start();
+        operation(result);
+
+    }
+
+    private void operation(Menu.MenuResult result) throws Exception{
 
         switch (result.operation()) {
             case OPEN_ARCHIVE -> {
                 System.out.println("Opening archive");
-                //        try {
-//            String json = archive.decrypt(files[idx], password);
-//            System.out.println("Content: " + json);
-//        } catch (Exception e) {
-//            System.out.println("Failed to decrypt: wrong password or corrupted file.");
-//        }
+                Menu.Archive archiveTmp = result.archive();
+                String json = null;
+                try {
+                    json = archive.decrypt(archiveTmp.file(), archiveTmp.password());
+                } catch (Exception e) {
+                    System.out.println("the password is wrong or the file is corrupted");
+                    Menu menu = new Menu();
+                    operation(menu.openArchive());
+                    return;
+                }
+                System.out.println("Content: " + json);
             }
             case CREATE_ARCHIVE -> {
                 Menu.Archive archiveTmp = result.archive();
@@ -44,6 +56,5 @@ public class Main {
         }
 
     }
-
 
 }
