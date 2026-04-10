@@ -52,10 +52,10 @@ public class MenuJLine {
 
     public MenuResult start() {
 
-        printDefaultColor("=== CriSafe ===");
-        printDefaultColor("1) Open existing archive");
-        printDefaultColor("2) Create new archive");
-        printDefaultColor("1000) Close");
+        print("=== CriSafe ===");
+        print("1) Open existing archive");
+        print("2) Create new archive");
+        print("1000) Close");
 
         String choice = readLine("Choice: ");
 
@@ -95,22 +95,19 @@ public class MenuJLine {
         try {
             files = FileArchiveService.listArchives();
         } catch (IOException e) {
-            terminal.writer().println("Error opening archive");
-            terminal.writer().flush();
+            printRed("Error opening archive");
             System.exit(1);
         }
 
         if (files.length == 0) {
-            terminal.writer().println("No " + FileArchiveService.EXTENSION + " archives found in: " + FileArchiveService.defaulPath());
-            terminal.writer().flush();
+            printRed("No " + FileArchiveService.EXTENSION + " archives found in: " + FileArchiveService.defaulPath());
             return null;
         }
 
-        terminal.writer().println("Available archives:");
+        print("Available archives:");
         for (int i = 0; i < files.length; i++) {
-            terminal.writer().printf("  %d) %s%n", i + 1, files[i].getFileName());
+            print(String.format("  %d) %s", i + 1, files[i].getFileName()));
         }
-        terminal.writer().flush();
 
         String input = readLine("Select archive number: ");
 
@@ -118,14 +115,12 @@ public class MenuJLine {
         try {
             idx = Integer.parseInt(input.trim()) - 1;
         } catch (NumberFormatException e) {
-            terminal.writer().println("Invalid selection.");
-            terminal.writer().flush();
+            printRed("Invalid selection.");
             return inputArchive();
         }
 
         if (idx < 0 || idx >= files.length) {
-            terminal.writer().println("Selection out of range.");
-            terminal.writer().flush();
+            printRed("Selection out of range.");
             return inputArchive();
         }
 
@@ -179,7 +174,7 @@ public class MenuJLine {
         }
     }
 
-    public void printDefaultColor(String message){
+    public void print(String message){
         new AttributedStringBuilder()
                 .style(AttributedStyle.DEFAULT)
                 .append(message)
