@@ -6,6 +6,7 @@ public class Main {
 
     CryptoService crypto;
     FileArchiveService archive;
+    MenuJLine menu;
 
     public Main() {
 
@@ -23,34 +24,32 @@ public class Main {
 
     public void init() throws Exception {
 
-        Menu menu = new Menu();
-        Menu.MenuResult result = menu.start();
+        menu = new MenuJLine();
+        MenuResult result = menu.start();
         operation(result);
 
     }
 
-    private void operation(Menu.MenuResult result) throws Exception{
+    private void operation(MenuResult result) throws Exception{
 
         switch (result.operation()) {
             case OPEN_ARCHIVE -> {
-                System.out.println("Opening archive");
-                Menu.Archive archiveTmp = result.archive();
+                Archive archiveTmp = result.archive();
                 String json = null;
                 try {
                     json = archive.decrypt(archiveTmp.file(), archiveTmp.password());
                 } catch (Exception e) {
-                    System.out.println("the password is wrong or the file is corrupted");
-                    Menu menu = new Menu();
+                    menu.printRed("the password is wrong or the file is corrupted");
                     operation(menu.openArchive());
                     return;
                 }
                 System.out.println("Content: " + json);
             }
             case CREATE_ARCHIVE -> {
-                Menu.Archive archiveTmp = result.archive();
+                Archive archiveTmp = result.archive();
                 Path outputPath = FileArchiveService.defaulPath().resolve(archiveTmp.name() + FileArchiveService.EXTENSION);
                 archive.encrypt(archiveTmp.content(), archiveTmp.password(), outputPath);
-                System.out.println("Archive created: " + outputPath);
+                menu.printRed("Archive created: " + outputPath);
                 init();
             }
         }
