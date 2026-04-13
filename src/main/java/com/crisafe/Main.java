@@ -52,6 +52,7 @@ public class Main {
                 menu.printRed("Archive created: " + outputPath);
                 init();
             }
+            case RESTART -> init();
         }
 
     }

@@ -55,11 +55,11 @@ public class MenuJLine {
         print("=== CriSafe ===");
         print("1) Open existing archive");
         print("2) Create new archive");
-        print("1000) Close");
+        print("999) Close");
 
         String choice = readLine("Choice: ");
 
-        if  (choice.equals("1000")) {
+        if  (choice.equals("999")) {
             System.exit(0);
         }
 
@@ -83,7 +83,7 @@ public class MenuJLine {
     public MenuResult openArchive() {
         Path path = inputArchive();
         if (path == null){
-            start();
+            return new MenuResult(Operation.RESTART, null);
         }
         String password = inputPassword();
         return new MenuResult(Operation.OPEN_ARCHIVE, new Archive(null, null, password, path));
@@ -108,8 +108,13 @@ public class MenuJLine {
         for (int i = 0; i < files.length; i++) {
             print(String.format("  %d) %s", i + 1, files[i].getFileName()));
         }
+        print("  999) Back");
 
         String input = readLine("Select archive number: ");
+
+        if (input.equals("999")) {
+            return null;
+        }
 
         int idx = -1;
         try {
@@ -175,17 +180,20 @@ public class MenuJLine {
     }
 
     public void print(String message){
-        new AttributedStringBuilder()
-                .style(AttributedStyle.DEFAULT)
-                .append(message)
-                .toAttributedString()
-                .println(terminal);
-        terminal.flush();
+        print(message, AttributedStyle.DEFAULT);
+    }
+
+    public void printBold(String message){
+        print(message, AttributedStyle.BOLD);
     }
 
     public void printRed (String message){
+        print(message, AttributedStyle.DEFAULT.foreground(AttributedStyle.RED));
+    }
+
+    private void print (String message, AttributedStyle style){
         new AttributedStringBuilder()
-                .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.RED))
+                .style(style)
                 .append(message)
                 .toAttributedString()
                 .println(terminal);
