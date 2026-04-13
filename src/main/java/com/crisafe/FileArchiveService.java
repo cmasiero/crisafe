@@ -87,6 +87,9 @@ public class FileArchiveService {
         return new String(plaintext, StandardCharsets.UTF_8);
     }
 
+    public static boolean existArchive(String name) {
+        return Files.exists(defaulPath().resolve(name + EXTENSION));
+    }
 
     public static Path[] listArchives() throws IOException {
         return listArchives(defaulPath());

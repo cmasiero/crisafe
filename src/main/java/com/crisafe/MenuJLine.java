@@ -26,6 +26,7 @@ public class MenuJLine {
 
     private final Terminal terminal;
     private final LineReader reader;
+    private final LineReader passwordReader;
 
     public MenuJLine() throws IOException {
         Logger.getLogger("org.jline").setLevel(Level.SEVERE);
@@ -48,11 +49,14 @@ public class MenuJLine {
                     }
                 })
                 .build();
+        this.passwordReader = LineReaderBuilder.builder()
+                .terminal(terminal)
+                .build();
     }
 
     public MenuResult start() {
 
-        print("=== CriSafe ===");
+        printBold("=== CriSafe ===");
         print("1) Open existing archive");
         print("2) Create new archive");
         print("999) Close");
@@ -74,6 +78,7 @@ public class MenuJLine {
     }
 
     public MenuResult createArchive() {
+        printBold("Creating archive");
         String name = inputName();
         String content = createContent();
         String password = inputPassword();
@@ -104,7 +109,7 @@ public class MenuJLine {
             return null;
         }
 
-        print("Available archives:");
+        printBold("Available archives:");
         for (int i = 0; i < files.length; i++) {
             print(String.format("  %d) %s", i + 1, files[i].getFileName()));
         }
@@ -134,9 +139,15 @@ public class MenuJLine {
 
     private String inputName() {
         String name = readLine("Archive name (without extension): ");
+
         if (name == null || name.isBlank()) {
             terminal.writer().println("Name cannot be empty.");
             terminal.writer().flush();
+            return inputName();
+        }
+
+        if (FileArchiveService.existArchive(name)) {
+            printRed("File already exists.");
             return inputName();
         }
         return name;
@@ -170,7 +181,7 @@ public class MenuJLine {
 
     private String readPassword(String prompt) {
         try {
-            return reader.readLine(prompt, '*');
+            return passwordReader.readLine(prompt, '*');
         } catch (UserInterruptException | EndOfFileException e) {
             terminal.writer().println("\nAborted.");
             terminal.writer().flush();
