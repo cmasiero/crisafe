@@ -6,13 +6,14 @@ public class Main {
 
     CryptoService crypto;
     FileArchiveService archive;
+    ArchiveManager archiveManager;
     MenuJLine menu;
 
     public Main() {
 
         crypto = new CryptoService();
         archive = new FileArchiveService(crypto);
-
+        archiveManager = new ArchiveManager();
     }
 
     public static void main(String[] args) throws Exception {
@@ -43,7 +44,9 @@ public class Main {
                     operation(menu.openArchive());
                     return;
                 }
-                System.out.println("Content: " + json);
+
+                archiveManager.load(json);
+
             }
             case CREATE_ARCHIVE -> {
                 Archive archiveTmp = result.archive();

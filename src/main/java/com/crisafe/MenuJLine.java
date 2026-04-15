@@ -18,11 +18,8 @@ import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MenuJLine {
 
-    private static final String JSON_EXAMPLE = """
-            {"00": "Example"}
-            """;
+public class MenuJLine {
 
     private final Terminal terminal;
     private final LineReader reader;
@@ -158,8 +155,8 @@ public class MenuJLine {
     }
 
     private String createContent() {
-        print("Create new archive content: " + JSON_EXAMPLE);
-        return JSON_EXAMPLE;
+        ArchiveRecord empty = new ArchiveRecord("", "", "", "");
+        return "[" + empty.toJson() + "]";
     }
 
     private String inputPassword() {
