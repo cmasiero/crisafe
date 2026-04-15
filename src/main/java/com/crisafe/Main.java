@@ -39,7 +39,7 @@ public class Main {
                 try {
                     json = archive.decrypt(archiveTmp.file(), archiveTmp.password());
                 } catch (Exception e) {
-                    menu.printRed("the password is wrong or the file is corrupted");
+                    menu.printRed("The password is wrong or the file is corrupted");
                     operation(menu.openArchive());
                     return;
                 }

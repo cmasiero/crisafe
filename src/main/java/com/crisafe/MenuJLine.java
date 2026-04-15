@@ -63,7 +63,12 @@ public class MenuJLine {
 
         String choice = readLine("Choice: ");
 
-        if  (choice.equals("999")) {
+        if (choice.equals("999")) {
+            try {
+                close();
+            } catch (IOException e) {
+                printRed("Error closing terminal: " + e.getMessage());
+            }
             System.exit(0);
         }
 
@@ -141,8 +146,7 @@ public class MenuJLine {
         String name = readLine("Archive name (without extension): ");
 
         if (name == null || name.isBlank()) {
-            terminal.writer().println("Name cannot be empty.");
-            terminal.writer().flush();
+            printRed("Name cannot be empty.");
             return inputName();
         }
 
@@ -154,15 +158,14 @@ public class MenuJLine {
     }
 
     private String createContent() {
-        terminal.writer().println("Create new archive content: " + JSON_EXAMPLE);
+        print("Create new archive content: " + JSON_EXAMPLE);
         return JSON_EXAMPLE;
     }
 
     private String inputPassword() {
         String password = readPassword("Password: ");
         if (password == null || password.isEmpty()) {
-            terminal.writer().println("Password cannot be empty.");
-            terminal.writer().flush();
+            printRed("Password cannot be empty.");
             return inputPassword();
         }
         return password;
@@ -172,8 +175,7 @@ public class MenuJLine {
         try {
             return reader.readLine(prompt);
         } catch (UserInterruptException | EndOfFileException e) {
-            terminal.writer().println("\nAborted.");
-            terminal.writer().flush();
+            printRed("\nAborted.");
             System.exit(0);
             return null;
         }
@@ -183,8 +185,7 @@ public class MenuJLine {
         try {
             return passwordReader.readLine(prompt, '*');
         } catch (UserInterruptException | EndOfFileException e) {
-            terminal.writer().println("\nAborted.");
-            terminal.writer().flush();
+            printRed("\nAborted.");
             System.exit(0);
             return null;
         }
