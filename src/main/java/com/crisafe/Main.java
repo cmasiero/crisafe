@@ -10,10 +10,8 @@ public class Main {
     MenuJLine menu;
 
     public Main() {
-
         crypto = new CryptoService();
         archive = new FileArchiveService(crypto);
-        archiveManager = new ArchiveManager();
     }
 
     public static void main(String[] args) throws Exception {
@@ -34,6 +32,13 @@ public class Main {
     private void operation(MenuResult result) throws Exception{
 
         switch (result.operation()) {
+            case CREATE_ARCHIVE -> {
+                Archive archiveTmp = result.archive();
+                Path outputPath = FileArchiveService.defaulPath().resolve(archiveTmp.name() + FileArchiveService.EXTENSION);
+                archive.encrypt(archiveTmp.content(), archiveTmp.password(), outputPath);
+                menu.printRed("Archive created: " + outputPath);
+                init();
+            }
             case OPEN_ARCHIVE -> {
                 Archive archiveTmp = result.archive();
                 String json = null;
@@ -44,16 +49,14 @@ public class Main {
                     operation(menu.openArchive());
                     return;
                 }
-
-                archiveManager.load(json);
-
+                archiveManager = new ArchiveManager(json);
+                operation(menu.operationInArchive());
             }
-            case CREATE_ARCHIVE -> {
-                Archive archiveTmp = result.archive();
-                Path outputPath = FileArchiveService.defaulPath().resolve(archiveTmp.name() + FileArchiveService.EXTENSION);
-                archive.encrypt(archiveTmp.content(), archiveTmp.password(), outputPath);
-                menu.printRed("Archive created: " + outputPath);
-                init();
+            case FILTER_RECORD -> {
+                System.out.println("#### FILTER_RECORD ####");
+            }
+            case CREATE_RECORD -> {
+                System.out.println("#### CREATE_RECORD ####");
             }
             case RESTART -> init();
         }

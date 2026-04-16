@@ -2,8 +2,9 @@ package com.crisafe;
 
 public enum Operation {
 
-    OPEN_ARCHIVE,
     CREATE_ARCHIVE,
-    RESTART;
-
+    OPEN_ARCHIVE,
+    CREATE_RECORD,
+    FILTER_RECORD,
+    RESTART
 }

@@ -11,6 +11,7 @@ import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class MenuJLine {
     private final Terminal terminal;
     private final LineReader reader;
     private final LineReader passwordReader;
+    private MenuResult currentResult;
 
     public MenuJLine() throws IOException {
         Logger.getLogger("org.jline").setLevel(Level.SEVERE);
@@ -69,7 +71,7 @@ public class MenuJLine {
             System.exit(0);
         }
 
-        return switch (choice) {
+        currentResult = switch (choice) {
             case "1" -> openArchive();
             case "2" -> createArchive();
             default -> {
@@ -77,23 +79,62 @@ public class MenuJLine {
                 yield start();
             }
         };
+
+        return currentResult;
     }
 
     public MenuResult createArchive() {
-        printBold("Creating archive");
+        printBold("=== Creating archive ===");
         String name = inputName();
         String content = createContent();
         String password = inputPassword();
-        return new MenuResult(Operation.CREATE_ARCHIVE, new Archive(name, content, password, null));
+        currentResult = new MenuResult(Operation.CREATE_ARCHIVE, new Archive(name, content, password, null), Optional.empty());
+        return currentResult;
     }
 
     public MenuResult openArchive() {
         Path path = inputArchive();
         if (path == null){
-            return new MenuResult(Operation.RESTART, null);
+            return new MenuResult(Operation.RESTART, null, Optional.empty());
         }
         String password = inputPassword();
-        return new MenuResult(Operation.OPEN_ARCHIVE, new Archive(null, null, password, path));
+        currentResult = new MenuResult(Operation.OPEN_ARCHIVE, new Archive(null, null, password, path), Optional.empty());
+        return currentResult;
+    }
+
+    public MenuResult operationInArchive(){
+
+        printBold("=== Operation in archive ===");
+        print("1) Filter");
+        print("2) Create record");
+        print("999) Back");
+
+        String choice = readLine("Choice: ");
+
+        if ("999".equals(choice)) {
+            return openArchive();
+        } else if ("1".equals(choice)) {
+            currentResult = new MenuResult(Operation.FILTER_RECORD, currentResult.archive(), Optional.empty());
+            return currentResult;
+        } else if ("2".equals(choice)) {
+            currentResult = new MenuResult(Operation.CREATE_RECORD, currentResult.archive(), Optional.empty());
+            return currentResult;
+        } else {
+            printRed("Invalid choice: " +  choice);
+            return operationInArchive();
+        }
+
+    }
+
+    public MenuResult findInArchive(){
+
+        printBold("=== Find in archive ===");
+        String filter = readLine("Filter (leave empty to show all): ");
+
+        currentResult = new MenuResult(Operation.FILTER_RECORD,currentResult.archive(), Optional.of(filter));
+
+        return currentResult;
+
     }
 
     private Path inputArchive() {

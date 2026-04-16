@@ -7,10 +7,11 @@ import java.util.List;
 
 public class ArchiveManager {
 
-    private final Gson gson = new Gson();
+    private final Gson gson;
     private List<ArchiveRecord> records;
 
-    public void load(String json) {
+    public ArchiveManager(String json) {
+        gson = new Gson();
         records = gson.fromJson(json, new TypeToken<List<ArchiveRecord>>() {}.getType());
     }
 
