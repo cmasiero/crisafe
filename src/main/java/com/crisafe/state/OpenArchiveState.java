@@ -45,7 +45,7 @@ public class OpenArchiveState extends BaseService implements State {
             return null;
         }
 
-        printBold("Available archives:");
+        printBold("=== Available archives ===");
         for (int i = 0; i < files.length; i++) {
             print(String.format("%d) %s", i + 1, files[i].getFileName()));
         }

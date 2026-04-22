@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class BaseService {
 
-    public final FileArchiveService archive;
+    public final FileArchiveService fileArchiveService;
 
     private final Terminal terminal;
     private final LineReader reader;
@@ -23,7 +23,7 @@ public class BaseService {
     public BaseService() {
 
         CryptoService crypto = new CryptoService();
-        archive = new FileArchiveService(crypto);
+        fileArchiveService = new FileArchiveService(crypto);
 
         Logger.getLogger("org.jline").setLevel(Level.SEVERE);
         try {

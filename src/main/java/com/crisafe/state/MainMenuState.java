@@ -1,11 +1,11 @@
 package com.crisafe.state;
 
 
-import com.crisafe.service.BaseService;
+import com.crisafe.command.ExitCommand;
 import com.crisafe.pattern.Command;
 import com.crisafe.pattern.Context;
-import com.crisafe.command.ExitCommand;
 import com.crisafe.pattern.State;
+import com.crisafe.service.BaseService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +16,7 @@ public class MainMenuState extends BaseService implements State {
 
     public MainMenuState() {
         commands.put("1", context -> context.setState(new OpenArchiveState()));
+        commands.put("2", context -> context.setState(new NewArchiveState()));
         commands.put("0", new ExitCommand());
     }
 
