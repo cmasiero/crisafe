@@ -1,4 +1,4 @@
-package com.crisafe;
+package com.crisafe.service;
 
 import org.jline.reader.*;
 import org.jline.terminal.Terminal;
@@ -12,18 +12,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-public class BaseOutput {
+public class BaseService {
 
-    CryptoService crypto;
-    FileArchiveService archive;
+    public final FileArchiveService archive;
 
     private final Terminal terminal;
     private final LineReader reader;
     private final LineReader passwordReader;
 
-    public BaseOutput() {
+    public BaseService() {
 
-        crypto = new CryptoService();
+        CryptoService crypto = new CryptoService();
         archive = new FileArchiveService(crypto);
 
         Logger.getLogger("org.jline").setLevel(Level.SEVERE);

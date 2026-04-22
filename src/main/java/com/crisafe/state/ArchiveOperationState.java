@@ -1,9 +1,15 @@
-package com.crisafe;
+package com.crisafe.state;
+
+import com.crisafe.pattern.Command;
+import com.crisafe.command.FindInArchiveCommand;
+import com.crisafe.pattern.Context;
+import com.crisafe.pattern.State;
+import com.crisafe.service.BaseService;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ArchiveOperationState extends BaseOutput implements State {
+public class ArchiveOperationState extends BaseService implements State {
 
     private String json ;
     private Map<String, Command> commands = new HashMap<>();

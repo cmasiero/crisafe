@@ -1,4 +1,4 @@
-package com.crisafe;
+package com.crisafe.pattern;
 
 public class Context {
 

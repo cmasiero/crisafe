@@ -1,4 +1,6 @@
-package com.crisafe;
+package com.crisafe.util;
+
+import com.crisafe.service.CryptoService;
 
 import java.security.SecureRandom;
 import java.util.Base64;

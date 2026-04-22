@@ -1,5 +1,9 @@
 package com.crisafe;
 
+import com.crisafe.pattern.Context;
+import com.crisafe.state.MainMenuState;
+import com.crisafe.pattern.State;
+
 public class Main {
 
     public static void main(String[] args) {

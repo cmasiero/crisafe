@@ -1,10 +1,16 @@
-package com.crisafe;
+package com.crisafe.state;
 
+
+import com.crisafe.service.BaseService;
+import com.crisafe.pattern.Command;
+import com.crisafe.pattern.Context;
+import com.crisafe.command.ExitCommand;
+import com.crisafe.pattern.State;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainMenuState extends BaseOutput implements State {
+public class MainMenuState extends BaseService implements State {
 
     private Map<String, Command> commands = new HashMap<>();
 

@@ -1,8 +1,12 @@
-package com.crisafe;
+package com.crisafe.state;
+
+import com.crisafe.service.BaseService;
+import com.crisafe.pattern.Context;
+import com.crisafe.pattern.State;
 
 import java.nio.file.Path;
 
-public class OpenSpecificArchiveState extends BaseOutput implements State {
+public class OpenSpecificArchiveState extends BaseService implements State {
 
     public final Path path;
 

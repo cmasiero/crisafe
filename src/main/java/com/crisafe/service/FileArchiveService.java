@@ -1,4 +1,6 @@
-package com.crisafe;
+package com.crisafe.service;
+
+import com.crisafe.Main;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
