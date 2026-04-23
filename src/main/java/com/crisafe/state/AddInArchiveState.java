@@ -1,6 +1,7 @@
 package com.crisafe.state;
 
 import com.crisafe.command.AddInArchiveCommand;
+import com.crisafe.pattern.Command;
 import com.crisafe.pattern.Context;
 import com.crisafe.pattern.State;
 import com.crisafe.service.BaseService;
@@ -9,7 +10,7 @@ import static com.crisafe.util.Constant.FIELD_SEP;
 
 public class AddInArchiveState extends BaseService implements State {
 
-//    private final AddInArchiveCommand command ;
+    private final Command command = new AddInArchiveCommand();
 
     @Override
     public String display() {
@@ -29,8 +30,10 @@ public class AddInArchiveState extends BaseService implements State {
         context.setAttribute("archive.user", parts[1]);
         context.setAttribute("archive.password", parts[2]);
         context.setAttribute("archive.note", parts[3]);
-//        ArchiveRecord archiveRecord = new ArchiveRecord(parts[0], parts[1], parts[2], parts[3]);
-//        new AddInArchiveCommand();
+
+
+
+        command.execute(context);
 
     }
 

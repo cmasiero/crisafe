@@ -62,6 +62,10 @@ public class BaseService {
         print(message, AttributedStyle.BOLD);
     }
 
+    public void printGreen (String message){
+        print(message, AttributedStyle.DEFAULT.foreground(AttributedStyle.GREEN));
+    }
+
     public void printRed (String message){
         print(message, AttributedStyle.DEFAULT.foreground(AttributedStyle.RED));
     }

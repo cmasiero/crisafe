@@ -25,6 +25,8 @@ public class OpenSpecificArchiveState extends BaseService implements State {
         try {
             String json = fileArchiveService.decrypt(path, password);
             context.setAttribute("json", json);
+            context.setAttribute("archivePath", path.toString());
+            context.setAttribute("archivePassword", password);
             context.setState(new ArchiveOperationState());
         } catch (Exception e) {
             printRed("The password is wrong or the file is corrupted");
