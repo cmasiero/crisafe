@@ -27,7 +27,7 @@ public class BaseService {
 
         Logger.getLogger("org.jline").setLevel(Level.SEVERE);
         try {
-            this.terminal = TerminalBuilder.builder().system(true).build();
+            this.terminal = TerminalBuilder.builder().system(true).jansi(true).build();
         } catch (IOException e) {
             throw new RuntimeException("Failed to initialize terminal", e);
         }

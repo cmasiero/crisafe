@@ -15,6 +15,7 @@ public class ArchiveOperationState extends BaseService implements State {
     public ArchiveOperationState() {
         commands.put("1", context -> context.setState(new FindInArchiveState()));
         commands.put("2", context -> context.setState(new AddInArchiveState()));
+        commands.put("3", context -> context.setState(new RemoveFromArchiveState()));
         commands.put("0", context -> context.setState(new OpenArchiveState()));
 
     }
@@ -24,6 +25,7 @@ public class ArchiveOperationState extends BaseService implements State {
         printBold("=== Archive Operation ===");
         print("1) Find In Archive");
         print("2) Add In Archive");
+        print("3) Remove from Archive");
         print("Return) Back");
         return readLine("Choice: ");
     }
