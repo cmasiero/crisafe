@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class OpenArchiveState extends BaseService implements State {
 
-    private Map<String, Command> commands = new HashMap<>();
+    private final Map<String, Command> commands = new HashMap<>();
 
     public OpenArchiveState() {
         try {
@@ -50,7 +50,7 @@ public class OpenArchiveState extends BaseService implements State {
             print(String.format("%d) %s", i + 1, files[i].getFileName()));
         }
 
-        print("0) Back");
+        print("Return) Back");
 
         return readLine("Select archive number: ");
 
@@ -58,7 +58,7 @@ public class OpenArchiveState extends BaseService implements State {
 
     @Override
     public void handleInput(String input, Context context) {
-
+        if (input == null || input.isEmpty()) input = "0";
         Command command = commands.get(input);
         if (command != null) {
             command.execute(context);

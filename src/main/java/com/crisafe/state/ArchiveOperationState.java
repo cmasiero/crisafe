@@ -24,12 +24,13 @@ public class ArchiveOperationState extends BaseService implements State {
         printBold("=== Archive Operation ===");
         print("1) Find In Archive");
         print("2) Add In Archive");
-        print("0) Back");
+        print("Return) Back");
         return readLine("Choice: ");
     }
 
     @Override
     public void handleInput(String input, Context context) {
+        if (input == null || input.isEmpty()) input = "0";
         Command command = commands.get(input);
         if (command != null) {
             command.execute(context);

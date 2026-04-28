@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class MainMenuState extends BaseService implements State {
 
-    private Map<String, Command> commands = new HashMap<>();
+    private final Map<String, Command> commands = new HashMap<>();
 
     public MainMenuState() {
         commands.put("1", context -> context.setState(new OpenArchiveState()));
@@ -25,12 +25,13 @@ public class MainMenuState extends BaseService implements State {
         printBold("=== CriSafe ===");
         print("1) Open existing archive");
         print("2) Create new archive");
-        print("0) Close");
+        print("Return) Close");
         return readLine("Choice: ");
     }
 
     @Override
     public void handleInput(String input, Context context) {
+        if (input == null || input.isEmpty()) input = "0";
         Command command = commands.get(input);
         if (command != null) {
             command.execute(context);
