@@ -12,7 +12,7 @@ public class FindInArchiveState extends BaseService implements State {
 
     @Override
     public String display() {
-        printBold("=== Find In Archive ===");
+        printBold("=== Find In Archive, '*' for all. Return to go back. ===");
         return readLine("Search for: ");
     }
 

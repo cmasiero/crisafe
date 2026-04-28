@@ -14,7 +14,7 @@ public class AddInArchiveState extends BaseService implements State {
 
     @Override
     public String display() {
-        printBold("=== Add in Archive ===");
+        printBold("=== Add in Archive, always Return to go back. ===");
         String company = readLine("Company: ");
         String user    = readPassword("User: ");
         String password = readPassword("Password: ");
@@ -31,7 +31,12 @@ public class AddInArchiveState extends BaseService implements State {
         context.setAttribute("archive.password", parts[2]);
         context.setAttribute("archive.note", parts[3]);
 
-
+        if ("".equals(parts[0]) && "".equals(parts[1]) &&
+                "".equals(parts[2]) && "".equals(parts[3])) {
+            printRed("No records Added, Go Back!");
+            context.setState(new ArchiveOperationState());
+            return;
+        }
 
         command.execute(context);
 
