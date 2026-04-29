@@ -17,6 +17,7 @@ public class ArchiveOperationState implements State {
         commands.put("1", context -> context.setState(new FindInArchiveState()));
         commands.put("2", context -> context.setState(new AddInArchiveState()));
         commands.put("3", context -> context.setState(new RemoveFromArchiveState()));
+        commands.put("4", context -> context.setState(new ModifyInArchiveState()));
         commands.put("0", context -> context.setState(new OpenArchiveState()));
     }
 
@@ -26,6 +27,7 @@ public class ArchiveOperationState implements State {
         output.print("1) Find In Archive");
         output.print("2) Add In Archive");
         output.print("3) Remove from Archive");
+        output.print("4) Modify in Archive");
         output.print("Return) Back");
         return output.readLine("Choice: ");
     }
