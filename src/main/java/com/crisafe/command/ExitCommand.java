@@ -1,13 +1,15 @@
 package com.crisafe.command;
 
-import com.crisafe.service.BaseService;
+import com.crisafe.service.OutputService;
 import com.crisafe.pattern.Command;
 import com.crisafe.pattern.Context;
 
-public class ExitCommand extends BaseService implements Command {
+public class ExitCommand implements Command {
+
+    private final OutputService output = OutputService.getInstance();
 
     public void execute(Context context) {
-        printRed("Exit...");
+        output.printRed("Exit...");
         context.stop();
     }
 

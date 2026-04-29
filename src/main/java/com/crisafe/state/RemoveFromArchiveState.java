@@ -5,20 +5,21 @@ import com.crisafe.command.RemoveFromArchiveCommand;
 import com.crisafe.pattern.Command;
 import com.crisafe.pattern.Context;
 import com.crisafe.pattern.State;
-import com.crisafe.service.BaseService;
+import com.crisafe.service.OutputService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
-public class RemoveFromArchiveState extends BaseService implements State {
+public class RemoveFromArchiveState implements State {
 
+    private final OutputService output = OutputService.getInstance();
     private final Command command = new RemoveFromArchiveCommand();
 
     @Override
     public String display() {
-        printBold("=== Remove from Archive, '*' for all. Return to go back. ===");
-        return readLine("Search for: ");
+        output.printBold("=== Remove from Archive, '*' for all. Return to go back. ===");
+        return output.readLine("Search for: ");
     }
 
     @Override
@@ -42,19 +43,19 @@ public class RemoveFromArchiveState extends BaseService implements State {
                 .toList();
 
         if (results.isEmpty()) {
-            printRed("No records found for: " + input);
+            output.printRed("No records found for: " + input);
             return;
         }
 
-        printGreen("Found " + results.size() + " record(s):");
+        output.printGreen("Found " + results.size() + " record(s):");
         for (int i = 0; i < results.size(); i++) {
             ArchiveRecord r = results.get(i);
-            print(String.format("%d) Company: %s | User: %s | Pass: %s | Note: %s",
+            output.print(String.format("%d) Company: %s | User: %s | Pass: %s | Note: %s",
                     i + 1, r.company(), r.user(), r.pass(), r.note()));
         }
-        print("Return) Back");
+        output.print("Return) Back");
 
-        String selection = readLine("Select index to remove: ");
+        String selection = output.readLine("Select index to remove: ");
         if (selection == null || selection.isEmpty()) {
             return;
         }
@@ -63,12 +64,12 @@ public class RemoveFromArchiveState extends BaseService implements State {
         try {
             index = Integer.parseInt(selection);
         } catch (NumberFormatException e) {
-            printRed("Invalid index");
+            output.printRed("Invalid index");
             return;
         }
 
         if (index < 1 || index > results.size()) {
-            printRed("Index out of range");
+            output.printRed("Index out of range");
             return;
         }
 

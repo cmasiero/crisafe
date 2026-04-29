@@ -1,7 +1,7 @@
 package com.crisafe.command;
 
 import com.crisafe.ArchiveRecord;
-import com.crisafe.service.BaseService;
+import com.crisafe.service.OutputService;
 import com.crisafe.pattern.Command;
 import com.crisafe.pattern.Context;
 import com.google.gson.Gson;
@@ -9,7 +9,10 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
-public class FindInArchiveCommand extends BaseService implements Command {
+public class FindInArchiveCommand implements Command {
+
+    private final OutputService output = OutputService.getInstance();
+
     @Override
     public void execute(Context context) {
 
@@ -29,10 +32,10 @@ public class FindInArchiveCommand extends BaseService implements Command {
                         .toList();
 
         if (results.isEmpty()) {
-            printRed("No records found for: " + search);
+            output.printRed("No records found for: " + search);
         } else {
-            printGreen("Found " + results.size() + " record(s):");
-            results.forEach(r -> print(
+            output.printGreen("Found " + results.size() + " record(s):");
+            results.forEach(r -> output.print(
                 "  Company: " + r.company() +
                 " | User: " + r.user() +
                 " | Pass: " + r.pass() +

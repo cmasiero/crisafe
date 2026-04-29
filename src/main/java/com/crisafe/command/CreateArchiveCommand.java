@@ -2,13 +2,16 @@ package com.crisafe.command;
 
 import com.crisafe.pattern.Command;
 import com.crisafe.pattern.Context;
-import com.crisafe.service.BaseService;
+import com.crisafe.service.OutputService;
 import com.crisafe.service.FileArchiveService;
 import com.crisafe.state.MainMenuState;
 
 import java.nio.file.Path;
 
-public class CreateArchiveCommand extends BaseService implements Command {
+public class CreateArchiveCommand implements Command {
+
+    private final OutputService output = OutputService.getInstance();
+    private final FileArchiveService fileArchive = FileArchiveService.getInstance();
 
     @Override
     public void execute(Context context) {
@@ -17,7 +20,7 @@ public class CreateArchiveCommand extends BaseService implements Command {
         String password = context.getAttribute("password");
 
         if (FileArchiveService.existArchive(archiveName)) {
-            printRed("Archive already exists: " + archiveName);
+            output.printRed("Archive already exists: " + archiveName);
             context.setState(new MainMenuState());
             return;
         }
@@ -25,10 +28,10 @@ public class CreateArchiveCommand extends BaseService implements Command {
         Path outputPath = FileArchiveService.defaulPath()
                 .resolve(archiveName + FileArchiveService.EXTENSION);
         try {
-            fileArchiveService.encrypt("[]", password, outputPath);
-            print("Archive created: " + outputPath);
+            fileArchive.encrypt("[]", password, outputPath);
+            output.print("Archive created: " + outputPath);
         } catch (Exception e) {
-            printRed("Failed to create archive: " + e.getMessage());
+            output.printRed("Failed to create archive: " + e.getMessage());
         }
 
         context.setState(new MainMenuState());

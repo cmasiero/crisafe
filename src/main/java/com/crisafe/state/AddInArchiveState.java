@@ -4,21 +4,22 @@ import com.crisafe.command.AddInArchiveCommand;
 import com.crisafe.pattern.Command;
 import com.crisafe.pattern.Context;
 import com.crisafe.pattern.State;
-import com.crisafe.service.BaseService;
+import com.crisafe.service.OutputService;
 
 import static com.crisafe.util.Constant.FIELD_SEP;
 
-public class AddInArchiveState extends BaseService implements State {
+public class AddInArchiveState implements State {
 
+    private final OutputService output = OutputService.getInstance();
     private final Command command = new AddInArchiveCommand();
 
     @Override
     public String display() {
-        printBold("=== Add in Archive, always Return to go back. ===");
-        String company = readLine("Company: ");
-        String user    = readPassword("User: ");
-        String password = readPassword("Password: ");
-        String note    = readLine("Note: ");
+        output.printBold("=== Add in Archive, always Return to go back. ===");
+        String company  = output.readLine("Company: ");
+        String user     = output.readLine("User: ");
+        String password = output.readLine("Password: ");
+        String note     = output.readLine("Note: ");
         return company + FIELD_SEP + user + FIELD_SEP + password + FIELD_SEP + note;
     }
 
@@ -33,7 +34,7 @@ public class AddInArchiveState extends BaseService implements State {
 
         if ("".equals(parts[0]) && "".equals(parts[1]) &&
                 "".equals(parts[2]) && "".equals(parts[3])) {
-            printRed("No records Added, Go Back!");
+            output.printRed("No records Added, Go Back!");
             context.setState(new ArchiveOperationState());
             return;
         }

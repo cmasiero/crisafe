@@ -1,17 +1,17 @@
 package com.crisafe.state;
 
-
 import com.crisafe.command.ExitCommand;
 import com.crisafe.pattern.Command;
 import com.crisafe.pattern.Context;
 import com.crisafe.pattern.State;
-import com.crisafe.service.BaseService;
+import com.crisafe.service.OutputService;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainMenuState extends BaseService implements State {
+public class MainMenuState implements State {
 
+    private final OutputService output = OutputService.getInstance();
     private final Map<String, Command> commands = new HashMap<>();
 
     public MainMenuState() {
@@ -22,11 +22,11 @@ public class MainMenuState extends BaseService implements State {
 
     @Override
     public String display() {
-        printBold("=== CriSafe ===");
-        print("1) Open existing archive");
-        print("2) Create new archive");
-        print("Return) Close");
-        return readLine("Choice: ");
+        output.printBold("=== CriSafe ===");
+        output.print("1) Open existing archive");
+        output.print("2) Create new archive");
+        output.print("Return) Close");
+        return output.readLine("Choice: ");
     }
 
     @Override
@@ -36,7 +36,7 @@ public class MainMenuState extends BaseService implements State {
         if (command != null) {
             command.execute(context);
         } else {
-            printRed("Invalid Choice");
+            output.printRed("Invalid Choice");
         }
     }
 }

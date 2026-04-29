@@ -4,16 +4,17 @@ import com.crisafe.command.FindInArchiveCommand;
 import com.crisafe.pattern.Command;
 import com.crisafe.pattern.Context;
 import com.crisafe.pattern.State;
-import com.crisafe.service.BaseService;
+import com.crisafe.service.OutputService;
 
-public class FindInArchiveState extends BaseService implements State {
+public class FindInArchiveState implements State {
 
+    private final OutputService output = OutputService.getInstance();
     private final Command command = new FindInArchiveCommand();
 
     @Override
     public String display() {
-        printBold("=== Find In Archive, '*' for all. Return to go back. ===");
-        return readLine("Search for: ");
+        output.printBold("=== Find In Archive, '*' for all. Return to go back. ===");
+        return output.readLine("Search for: ");
     }
 
     @Override

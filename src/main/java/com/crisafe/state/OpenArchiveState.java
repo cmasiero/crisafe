@@ -3,7 +3,7 @@ package com.crisafe.state;
 import com.crisafe.pattern.Command;
 import com.crisafe.pattern.Context;
 import com.crisafe.pattern.State;
-import com.crisafe.service.BaseService;
+import com.crisafe.service.OutputService;
 import com.crisafe.service.FileArchiveService;
 
 import java.io.IOException;
@@ -11,9 +11,10 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OpenArchiveState extends BaseService implements State {
+public class OpenArchiveState implements State {
 
     private final Map<String, Command> commands = new HashMap<>();
+    private final OutputService output = OutputService.getInstance();
 
     public OpenArchiveState() {
         try {
@@ -23,7 +24,7 @@ public class OpenArchiveState extends BaseService implements State {
                 commands.put(String.valueOf(i + 1), context -> context.setState(new OpenSpecificArchiveState(files[finalI])));
             }
         } catch (IOException e) {
-            printRed("Error opening archive");
+            output.printRed("Error opening archive");
             System.exit(1);
         }
         commands.put("0", context -> context.setState(new MainMenuState()));
@@ -36,23 +37,23 @@ public class OpenArchiveState extends BaseService implements State {
         try {
             files = FileArchiveService.listArchives();
         } catch (IOException e) {
-            printRed("Error opening archive");
+            output.printRed("Error opening archive");
             System.exit(1);
         }
 
         if (files.length == 0) {
-            printRed("No " + FileArchiveService.EXTENSION + " archives found in: " + FileArchiveService.defaulPath());
+            output.printRed("No " + FileArchiveService.EXTENSION + " archives found in: " + FileArchiveService.defaulPath());
             return null;
         }
 
-        printBold("=== Available archives ===");
+        output.printBold("=== Available archives ===");
         for (int i = 0; i < files.length; i++) {
-            print(String.format("%d) %s", i + 1, files[i].getFileName()));
+            output.print(String.format("%d) %s", i + 1, files[i].getFileName()));
         }
 
-        print("Return) Back");
+        output.print("Return) Back");
 
-        return readLine("Select archive number: ");
+        return output.readLine("Select archive number: ");
 
     }
 
@@ -63,7 +64,7 @@ public class OpenArchiveState extends BaseService implements State {
         if (command != null) {
             command.execute(context);
         } else {
-            printRed("Invalid Choice");
+            output.printRed("Invalid Choice");
         }
 
     }

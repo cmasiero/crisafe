@@ -3,7 +3,8 @@ package com.crisafe.command;
 import com.crisafe.ArchiveRecord;
 import com.crisafe.pattern.Command;
 import com.crisafe.pattern.Context;
-import com.crisafe.service.BaseService;
+import com.crisafe.service.OutputService;
+import com.crisafe.service.FileArchiveService;
 import com.crisafe.state.ArchiveOperationState;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -11,7 +12,10 @@ import com.google.gson.reflect.TypeToken;
 import java.nio.file.Path;
 import java.util.List;
 
-public class AddInArchiveCommand extends BaseService implements Command {
+public class AddInArchiveCommand implements Command {
+
+    private final OutputService output = OutputService.getInstance();
+    private final FileArchiveService fileArchive = FileArchiveService.getInstance();
 
     @Override
     public void execute(Context context) {
@@ -27,15 +31,13 @@ public class AddInArchiveCommand extends BaseService implements Command {
         records.add(new ArchiveRecord(company, user, password, note));
         String newJson = gson.toJson(records);
 
-        System.out.println("--->" + newJson);
-
         try {
-            fileArchiveService.encrypt(newJson, context.getAttribute("archivePassword"),
+            fileArchive.encrypt(newJson, context.getAttribute("archivePassword"),
                     Path.of(context.getAttribute("archivePath")));
             context.setAttribute("json", newJson);
-            printGreen("Records added");
+            output.printGreen("Records added");
         } catch (Exception e) {
-            printRed("Failed to save: " + e.getMessage());
+            output.printRed("Failed to save: " + e.getMessage());
         }
 
         context.setState(new ArchiveOperationState());

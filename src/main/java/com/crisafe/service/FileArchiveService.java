@@ -27,11 +27,17 @@ public class FileArchiveService {
     private static final int GCM_TAG_BITS = 128;
 
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+    private static final  CryptoService CRYPTO_SERVICE = new CryptoService();
 
-    private final CryptoService cryptoService;
+    private FileArchiveService() {
+    }
 
-    public FileArchiveService(CryptoService cryptoService) {
-        this.cryptoService = cryptoService;
+    private static class Holder {
+        private static final FileArchiveService INSTANCE = new FileArchiveService();
+    }
+
+    public static FileArchiveService getInstance() {
+        return FileArchiveService.Holder.INSTANCE;
     }
 
     /**
@@ -48,7 +54,7 @@ public class FileArchiveService {
         SECURE_RANDOM.nextBytes(salt);
         SECURE_RANDOM.nextBytes(iv);
 
-        byte[] key        = cryptoService.encode(password, salt);
+        byte[] key        = CRYPTO_SERVICE.encode(password, salt);
         byte[] plaintext  = jsonContent.getBytes(StandardCharsets.UTF_8);
         byte[] ciphertext = aesgcmEncrypt(key, iv, plaintext);
 
@@ -83,7 +89,7 @@ public class FileArchiveService {
         System.arraycopy(fileBytes, SALT_BYTES,           iv,         0, IV_BYTES);
         System.arraycopy(fileBytes, SALT_BYTES + IV_BYTES, ciphertext, 0, ciphertext.length);
 
-        byte[] key       = cryptoService.encode(password, salt);
+        byte[] key       = CRYPTO_SERVICE.encode(password, salt);
         byte[] plaintext = aesgcmDecrypt(key, iv, ciphertext);
 
         return new String(plaintext, StandardCharsets.UTF_8);

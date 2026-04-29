@@ -3,13 +3,14 @@ package com.crisafe.state;
 import com.crisafe.pattern.Command;
 import com.crisafe.pattern.Context;
 import com.crisafe.pattern.State;
-import com.crisafe.service.BaseService;
+import com.crisafe.service.OutputService;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ArchiveOperationState extends BaseService implements State {
+public class ArchiveOperationState implements State {
 
+    private final OutputService output = OutputService.getInstance();
     private final Map<String, Command> commands = new HashMap<>();
 
     public ArchiveOperationState() {
@@ -17,17 +18,16 @@ public class ArchiveOperationState extends BaseService implements State {
         commands.put("2", context -> context.setState(new AddInArchiveState()));
         commands.put("3", context -> context.setState(new RemoveFromArchiveState()));
         commands.put("0", context -> context.setState(new OpenArchiveState()));
-
     }
 
     @Override
     public String display() {
-        printBold("=== Archive Operation ===");
-        print("1) Find In Archive");
-        print("2) Add In Archive");
-        print("3) Remove from Archive");
-        print("Return) Back");
-        return readLine("Choice: ");
+        output.printBold("=== Archive Operation ===");
+        output.print("1) Find In Archive");
+        output.print("2) Add In Archive");
+        output.print("3) Remove from Archive");
+        output.print("Return) Back");
+        return output.readLine("Choice: ");
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ArchiveOperationState extends BaseService implements State {
         if (command != null) {
             command.execute(context);
         } else {
-            printRed("Invalid Choice");
+            output.printRed("Invalid Choice");
         }
     }
 
